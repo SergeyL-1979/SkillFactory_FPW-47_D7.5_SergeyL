@@ -1,0 +1,73 @@
+{% extends 'default.html' %}
+{% load custom_filters %}
+{% block title %} {{ post_detail.headline }} {% endblock %}
+
+
+{% block content %}
+<div class="rat">
+    <h3>Категория: {% for pc in post_category %} {{ pc }}, {% endfor %}</h3>
+    <input type="button" class="btn btn-light btn-outline-info" onclick="history.back(-3);" value="Назад"/>
+</div>
+<hr>
+<div>
+    <h4> Заголовок: ** {{ post_detail.headline|censor }} ** </h4>
+    <p><b>Текст:</b> {{ post_detail.post_text|censor }} </p>
+    <p><b> Рейтинг поста: {{ post_detail.post_rating }} </b> &#61;&#61; <em><b>{{post_detail.create_date|date:'d M Y'}}</b></em><br>
+        <q>Автор текста: <strong>{{ post_detail.post_author.author_user.first_name }}</strong> &#151;
+            Рейтинг автора: {{ post_detail.post_author.author_rating }}</q></p>
+</div>
+<strong><q>&#61;&#61;&#61;&#61;&#61;&#61;&#61;&#61;&#61;&#61;&#61;&#61;&#61;&#61;&#61;&#61;&#61;&#61;&#61;&#61;&#61;</q></strong>
+<p><a href="{% url 'post_update_view' post_detail.id %}" style="text-align: right;"><u>Редактировать пост</u></a></p>
+<p><a href="{% url 'post_delete_view' post_detail.id %}" style="text-align: right;"><u> Удалить </u></a></p>
+
+<!--============================ LIKE \ DESLIKE ================================================-->
+<div>
+    <form action="" method="" class="btn">
+        {% csrf_token %}
+        <button type="submit" value="{{ post_detail.pk }}" name="pk" class="btn btn-light btn-outline-primary"> &#43;
+        </button>
+    </form>
+
+    <strong> Поставь лайк </strong>
+    {{ post_detail.post_rating }}
+
+    <form action="" method="" class="btn">
+        {% csrf_token %}
+        <button type="submit" value="{{ post_detail.pk }}" name="pk" class="btn btn-light btn-outline-danger"> &#45;
+        </button>
+    </form>
+</div>
+
+<!--=================================== КОММЕНТАРИИ ================================================================-->
+<hr> <h3> &lowast; Комментарии &lowast; </h3>
+<b> --------------- </b>
+<div>
+    {% if comment_list %}
+    {% for comments in comment_list %}
+    <a> {{ comments.comment_user.first_name }} &lowast; {{ comments.comment_create|date:'d F Y, H:i' }} &lowast; </a>
+    <h4> {{ comments.comment_text|censor }} </h4>
+    <strong> Поставь лайк {{ comments.comment_rating }} </strong>
+    <br>
+    <p><q>&lowast;&lowast;&lowast;</q></p>
+    {% endfor %}
+    {% else %}
+    <h3>NO COMMENT</h3>
+    {% endif %}
+
+
+    <div>
+        <h2> Добавить новый комментарий </h2>
+        <form action="" style="text-align: center;" method="post">
+            {% csrf_token %}
+            {% for f in form %}
+            <p><label class="form-label" for="{{f.ai_for_label}}">{{f.label}}: </label> {{ f }} </p>
+            <div class="form-error">{{ f.errors }}</div>
+            {% endfor %}
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+
+</div>
+
+
+{% endblock %}

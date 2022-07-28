@@ -1,0 +1,54 @@
+{% extends 'default.html' %}
+{% load custom_filters %}
+
+{% block title %} МОИ ПУБЛИКАЦИИ {% endblock %}
+
+
+{% block content %}
+<div>
+    <h1> {{ time_now|date:'d F Y H:i'}}</h1>
+</div>
+<div class="container">
+    <h3> Моя подписка на выбранные категории: </h3>
+    {% for sub in my_subscribers %}
+    <strong><q> {{ sub.category }} </q></strong>
+    {% endfor %}
+</div>
+<hr>
+<div class="container">
+    <h4>МОИ ПУБЛИКАЦИИ</h4>
+    {% if my_author %}
+    <table class="table" style="margin: auto; width: auto">
+        <thead>
+        <tr>
+            <th>ЗАГОЛОВОК</th>
+            <th>ДАТА ПУБЛИКАЦИИ</th>
+            <th>ТЕКСТ ПОСТА</th>
+            <th>РЕЙТИНГ ПОСТА</th>
+            <th>АВТОР ПОСТА</th>
+            <th>РЕЙТИНГ АВТОРА</th>
+            <th>ТИП</th>
+            <th>КАТЕГОРИЯ</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for p in my_author %}
+        <tr>
+            <td><a href="{{ p.get_absolute_url }}"> {{ p.headline|censor }} </a></td>
+            <td>{{ p.create_date|date:'d F Y' }}</td>
+            <td>{{ p.post_text|truncatechars:50|censor }}</td>
+            <td><b>{{ p.post_rating }}</b></td>
+            <td>{{ p.post_author.author_user.first_name}} {{p.post_author.author_user.last_name}}</td>
+            <td> {{ p.post_author.author_rating }}</td>
+            <td> {{ p.get_position_display }}</td>
+            <td> {{ p.post_category }}</td>
+        </tr>
+        {% endfor %}
+        <tbody>
+    </table>
+    {% else %}
+    <h2> ВЫ ЕЩЕ НЕ НАПИСАЛИ ПУБЛИКАЦИИ КАК АВТОР </h2>
+    {% endif %}
+</div>
+
+{% endblock %}

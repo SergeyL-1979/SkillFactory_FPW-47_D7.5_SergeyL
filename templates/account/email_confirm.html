@@ -1,0 +1,41 @@
+{% extends "default.html" %}
+
+{% load static %}
+{% load account %}
+
+{% block head_title %}Confirm E-mail Address{% endblock %}
+
+
+{% block content %}
+<div>
+    <strong>Menu:</strong>
+    <ul>
+        <li><a href="/accounts/login/">Sign In</a></li>
+        <li><a href="/accounts/signup/">Sign Up</a></li>
+    </ul>
+</div>
+<h1>Подтвердите адрес электронной почты</h1>
+
+{% if confirmation %}
+
+{% user_display confirmation.email_address.user as user_display %}
+
+<p>{% with confirmation.email_address.email as email %}Пожалуйста, подтвердите, что
+    <a href="mailto: {{ email }}">{{ email }}</a>
+    это адрес электронной почты для пользователя {{ user_display }}.{% endwith %}</p>
+
+<form method="post" action="{% url 'account_confirm_email' confirmation.key %}">
+    {% csrf_token %}
+    <button type="submit">Confirm</button>
+</form>
+
+{% else %}
+
+{% url 'account_email' as email_url %}
+
+<p>Срок действия этой ссылки для подтверждения по электронной почте истек или она недействительна.
+    Пожалуйста<a href="{{ email_url }}">отправить новый запрос подтверждения по электронной почте</a>.</p>
+
+{% endif %}
+
+{% endblock %}

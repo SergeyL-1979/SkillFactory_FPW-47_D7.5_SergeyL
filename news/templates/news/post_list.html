@@ -1,0 +1,60 @@
+{% extends 'default.html' %}
+{% load custom_filters %}
+{% block title %} NewsPortal {% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1> {{ time_now|date:'d F Y H:i'}}</h1>
+    <p class="lead">Новостей на странице: {{ post_list|length }}</p>
+    {% if user.is_anonymous %}
+        <b>Желаете подписаться?</b>
+        <b>Пожалуйста, <a href="{% url 'account_login' %}?next{{ request.path }}">авторизуйтесь.</a></b>
+    {% else %}
+    <div>
+        {% for c in category_name %}
+        <strong><q><a href="{% url 'category_detail' c.pk %}"> {{ c.category_name }} </a></q></strong>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+<br>
+<div class="container">
+    <table class="table" style="margin: auto; width: auto">
+        <thead>
+        <tr>
+            <th>ЗАГОЛОВОК</th>
+            <th>ДАТА ПУБЛИКАЦИИ</th>
+            <th>ТЕКСТ ПОСТА</th>
+            <th>РЕЙТИНГ ПОСТА</th>
+            <th>АВТОР ПОСТА</th>
+            <th>РЕЙТИНГ АВТОРА</th>
+            <th>ТИП</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% if post_list %}
+        {% for p in post_list %}
+        <tr>
+            <td><a href="{{ p.get_absolute_url }}"> {{ p.headline|censor }} </a></td>
+            <td>{{ p.create_date|date:'d F Y' }}</td>
+            <td>{{ p.post_text|truncatechars:50|censor }}</td>
+            <td><b>{{ p.post_rating }}</b></td>
+            <td>{{ p.post_author.author_user.first_name}} {{p.post_author.author_user.last_name}}</td>
+            <td> {{ p.post_author.author_rating }}</td>
+            <td> {{ p.get_position_display }} </td>
+        </tr>
+        {% endfor %}
+        <tbody>
+    </table>
+    {% else %}
+    <h2> NEWS OUTPUT </h2>
+    {% endif %}
+</div>
+<br>
+<a class="btn btn-info" href="{% url 'post_create_view' %}">Добавить свой пост</a>
+
+
+{% include "pagination.html" %}
+
+
+{% endblock %}

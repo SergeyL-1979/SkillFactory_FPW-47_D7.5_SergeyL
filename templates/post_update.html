@@ -1,0 +1,30 @@
+{% extends 'default.html' %}
+{% load custom_filters %}
+
+{% block title %} {{ post_update_view.headline }} {% endblock %}
+
+
+{% block content %}
+<strong> {{ post_update_view.headline }} </strong>
+
+<div class="container">
+    <form method="POST">
+        {% csrf_token %}
+
+        <br> Заголовок
+        {{ form.headline }}
+        <br> Текст
+        {{ form.post_text }}
+        <br>
+        {{ form.position }}
+        <br>
+        <br> Категория
+        {{ form.post_category }}
+        <br>
+
+        <br>
+        <input class="btn-info btn" type="submit" value="Внести изменения">
+    </form>
+</div>
+
+{% endblock %}

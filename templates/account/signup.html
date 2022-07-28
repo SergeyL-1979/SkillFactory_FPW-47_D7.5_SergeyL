@@ -1,0 +1,24 @@
+{% extends 'default.html' %}
+{% load static %}
+{% load socialaccount %}
+
+{% block title %} Signup {% endblock %}
+
+{% block content %}
+
+<div class="container">
+  <h1>Sign Up</h1>
+
+  <p>Already have an account? Then please <a href="{{ login_url }}">sign in</a> </p>
+
+  <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
+    {% csrf_token %}
+
+    {% for f in form %}
+    <p><label class="form-label" for="{{f.ai_for_label}}">{{f.label}}: </label> {{ f }} </p>
+    <div class="form-error">{{ f.errors }}</div>
+    {% endfor %}
+    <button class="btn btn-success" type="submit"> Sign Up </button>
+  </form>
+</div>
+{% endblock %}

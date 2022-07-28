@@ -1,0 +1,29 @@
+{% extends 'default.html' %}
+{% load static %}
+{% load socialaccount %}
+
+{% block title %} {{ provider.name }}  {% endblock title %}
+
+{% block content %}
+
+<div>
+    <div>
+      <strong>Menu:</strong>
+      <ul>
+        <li><a href="/accounts/login/">Sign In</a></li>
+        <li><a href="/accounts/signup/">Sign Up</a></li>
+      </ul>
+    </div>
+
+    <h1>Sign In Via {{ provider.name }}</h1>
+
+    <p>You are about to sign in using a third party account from {{ provider.name }}.</p>
+
+    <form method="post">
+        {% csrf_token %}
+      <button type="submit">Continue</button>
+    </form>
+
+</div>
+
+{% endblock %}

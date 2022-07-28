@@ -1,0 +1,29 @@
+{% extends 'default.html' %}
+{% load custom_filters %}
+
+{% block title %} Удаление статьи {% endblock title %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 col-xl-10 mx-auto">
+            <h2>Вы действительно хотите удалить данный пост?</h2> <br>
+
+            <div>
+                <p class="post-title"> Заголовок: {{ post.headline|censor }} </p>
+                <p style="text-align: justify;">Текс: {{ post.post_text }}</p>
+                <p class="post-meta"><strong></strong>Post by
+                    <strong>{{ post.post_author }}</strong>
+                    Дата публикации: {{ post.create_date|date:'d M Y h:m' }}</p>
+            </div>
+
+            <br>
+            <form method="POST">
+                {% csrf_token %}
+                <p> {{ post_text }}</p>
+                <input class=" btn btn-danger mx-auto" type="submit" value="подтвердить">
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,41 @@
+{% extends 'default.html' %}
+{% load static %}
+{% load socialaccount %}
+
+{% block title %} SIGN GOOGLE  {% endblock title %}
+
+{% block content %}
+
+<div class="login-page">
+    <h1> Вход на ПОРТАЛ НОВОСТЕЙ </h1>
+  <div class="form">
+    <form class="login-form" method="POST" action="">
+        {% csrf_token %}
+        <br>
+        <div class="form-error"> {{ form.non_field_errors }} </div>
+        <br>
+        {% for f in form %}
+        <p><label class="form-label" for="{{f.ai_for_label}}">{{f.label}}: </label> {{ f }} </p>
+        <div class="form-error">{{ f.errors }}</div>
+        {% endfor %}
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Войти</button>
+        </div>
+<!--        <button class="btn btn-success" type="submit">Sign In</button>-->
+        <br>
+    </form>
+        <div class="toc">
+            <h2>Google OAuth Project</h2>
+            <ul>
+              <li><a href="{% provider_login_url 'google' %}">Login With Google</a></li>
+              <li><a href="{% provider_login_url 'yandex' %}">Login With Yandex</a></li>
+              <li><a href="{% provider_login_url 'yahoo' %}">Login With Yahoo</a></li>
+            </ul>
+        </div>
+        {% if form.non_field_errors %}
+        <ul>{{ form.non_field_errors }}</ul>
+        {% endif %}
+  </div>
+</div>
+
+{% endblock %}

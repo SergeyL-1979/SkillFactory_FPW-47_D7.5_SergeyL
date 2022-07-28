@@ -1,0 +1,43 @@
+{% extends 'default.html' %}
+{% load custom_filters %}
+{% block title %} Search {% endblock %}
+
+
+{% block content %}
+
+<div class="container">
+    <form method="GET">
+     {{ filter.form.as_p }}<!-- Форму от фильтров за нас сделает django. А вот кнопку, увы придётся делать самому -->
+<!--        <input name="q_author" type="text" placeholder="Введите имя автора">-->
+<!--        <input name="q_headline" type="text" placeholder="Введите заголовок">-->
+<!--        <input name="q_date" type="date">-->
+    <input type="submit" value="Найти">
+    </form>
+</div>
+
+<br>
+<div class="container">
+    <table class="list-group-item">
+        <tr>
+            <th>ЗАГОЛОВОК</th>
+            <th>ДАТА ПУБЛИКАЦИИ</th>
+            <th>ТЕКСТ ПОСТА</th>
+            <th>РЕЙТИНГ ПОСТА</th>
+            <th>АВТОР ПОСТА</th>
+            <th>РЕЙТИНГ АВТОРА</th>
+        </tr>
+
+        {% for p in filter.qs %}
+        <tr>
+            <td><a href="{{ p.get_absolute_url }}"> {{ p.headline|censor }} </a></td>
+            <td>{{ p.create_date|date:'d F Y' }}</td>
+            <td>{{ p.post_text|truncatechars:50|censor }}</td>
+            <td><b>{{ p.post_rating }}</b></td>
+            <td>{{ p.post_author.author_user.first_name}} {{p.post_author.author_user.last_name}}</td>
+            <td>{{ p.post_author.author_rating }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+{% endblock %}
